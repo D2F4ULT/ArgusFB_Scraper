@@ -119,16 +119,6 @@ Run:
 python3 scripts/save_state.py
 ```
 
-### Option B: Export an existing session (advanced)
-
-If you already have a workflow to create Playwright storage state, you can place the file at:
-
-- `./facebook_state.json`
-
-> ✅ **Security**: `facebook_state.json` should stay **local** and should **never** be committed to GitHub.
-
----
-
 ## Usage
 
 Run from the project root:

@@ -378,7 +378,3 @@ Your `.gitignore` should cover these.
 GPL-3.0 (see `LICENSE`).
 
 ---
-
-## Disclaimer
-
-This tool i

@@ -334,14 +334,6 @@ Notes:
 
 ## Common issues & fixes
 
-### “Missing state file: facebook_state.json”
-You need to generate the state file first (see **Authentication**).
-
-### “comment_root_not_found”
-Facebook markup changes often. The comment root selector is based on known class clusters. If it breaks, you may need to update:
-
-- `COMMENT_ROOT_CLASSES` in `src/config.py`
-
 ### Timeouts / slow crawling
 Increase these flags:
 
@@ -351,13 +343,13 @@ Increase these flags:
 - Reduce concurrency: `--concurrency 1`
 
 ### Getting blocked / login checkpoints
-Use `--feed-headed` and `--headed` to see what’s happening:
+You can try using: `--feed-headed` and `--headed` flags to see what’s happening:
 
 ```bash
 python3 src/main.py --group ... --feed-headed --headed --verbose
 ```
 
-Then re-generate `facebook_state.json` if needed.
+Or re-generate `facebook_state.json` if needed.
 
 ---
 

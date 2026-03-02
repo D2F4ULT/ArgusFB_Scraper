@@ -177,6 +177,75 @@ To see all options:
 python3 src/main.py --help
 ```
 
+```
+usage: main.py [-h] [--group GROUP] [--state STATE] [--last-days LAST_DAYS] [--max-posts MAX_POSTS] [--max-comments MAX_COMMENTS] [--concurrency CONCURRENCY]
+               [--feed-headed] [--headed] [--out OUT] [--debug] [--debug-out DEBUG_OUT] [--page-timeout PAGE_TIMEOUT] [--per-post-max-seconds PER_POST_MAX_SECONDS]
+               [--pause-ms PAUSE_MS] [--feed-pause-ms FEED_PAUSE_MS] [--graphql-batch GRAPHQL_BATCH] [--stall-limit STALL_LIMIT] [--feed-scroll-px FEED_SCROLL_PX]
+               [--scroll-steps SCROLL_STEPS] [--cycles CYCLES] [--no-growth-cycles NO_GROWTH_CYCLES] [--verbose]
+
+Fetch posts from a Facebook group and write ONE primary JSON file:
+  posts sorted newest->oldest + extracted comments/replies per post.
+
+Unix-like behavior:
+  - No args OR missing required args => print help and exit(0).
+
+options:
+  -h, --help            show this help message and exit
+
+Basic controls:
+  --group GROUP         Facebook group URL (required).
+  --state STATE         Playwright storage state JSON (default: facebook_state.json)
+  --last-days LAST_DAYS
+                        If >0: keep only posts from the last N days (default: 0)
+  --max-posts MAX_POSTS
+                        How many unique posts to collect from the feed (default: 50)
+  --max-comments MAX_COMMENTS
+                        Max comment/reply items per post (default: 50)
+  --concurrency CONCURRENCY
+                        How many posts to crawl in parallel (default: 3)
+  --feed-headed         Show browser during feed capture (default: headless)
+  --headed              Show browser during post crawling (default: headless)
+
+Output control:
+  --out OUT             Primary output JSON (default: sorted_n_days.json)
+
+Debug output (optional):
+  --debug               If set, also write debug JSON.
+  --debug-out DEBUG_OUT
+                        Debug JSON path (default: debug_output.json)
+
+Timing & pauses (tuning):
+  --page-timeout PAGE_TIMEOUT
+                        Navigation timeout in ms (default: 60000)
+  --per-post-max-seconds PER_POST_MAX_SECONDS
+                        Max seconds per post before bailing (default: 90)
+  --pause-ms PAUSE_MS   Pause between scroll steps inside comments (default: 450)
+  --feed-pause-ms FEED_PAUSE_MS
+                        Pause after each feed scroll (default: 900)
+
+Advanced controls:
+  --graphql-batch GRAPHQL_BATCH
+                        GraphQL responses processed per cycle (default: 2)
+  --stall-limit STALL_LIMIT
+                        Stop feed after N stall cycles (default: 6)
+  --feed-scroll-px FEED_SCROLL_PX
+                        Pixels per feed scroll step (default: 1500)
+  --scroll-steps SCROLL_STEPS
+                        Scroll steps per cycle inside comments (default: 6)
+  --cycles CYCLES       Max scroll cycles per post (default: 8)
+  --no-growth-cycles NO_GROWTH_CYCLES
+                        Stop after N no-growth cycles (default: 2)
+
+Logging:
+  --verbose             Verbose logs (disables progress bars)
+
+Examples:
+  Default:
+    python3 src/main.py --group https://www.facebook.com/groups/kvartira.berlin --last-days 10
+
+  Debug:
+    python3 src/main.py --group https://www.facebook.com/groups/kvartira.berlin --last-days 10 --debug
+```
 ---
 
 ## How it works (pipeline)
@@ -194,7 +263,7 @@ python3 src/main.py --help
    - Opens each post page
    - Extracts “best effort” metrics (reactions + comment count)
    - Finds the comment root container
-   - Scrolls and parses comment/reply “articles”
+   - Scrolls and parses comment/reply “articles.”
    - Deduplicates items using a stable key
 
 4. **Build output** (`output_build.py`)
